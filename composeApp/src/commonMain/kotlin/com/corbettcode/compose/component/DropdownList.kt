@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,14 +57,16 @@ fun DropdownList(
         // button
         Box(
             modifier = modifier
-                .background(Color.Red)
+                .background(MaterialTheme.colors.secondary)
                 .clickable { showDropdown = true },
-    //            .clickable { showDropdown = !showDropdown },
+//                .clickable { showDropdown = !showDropdown },
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = if (itemList.isNotEmpty()) itemList[selectedIndex]  else "",
-                modifier = Modifier.padding(3.dp)
+                color = MaterialTheme.colors.onSecondary,
+                modifier = Modifier
+                    .padding(3.dp)
             )
         }
 
@@ -90,15 +93,21 @@ fun DropdownList(
                             }
                             Box(
                                 modifier = Modifier
-                                    .background(Color.Green)
-                                    .fillMaxWidth()
+                                    .background( if (index == selectedIndex)
+                                        MaterialTheme.colors.secondary
+                                        else MaterialTheme.colors.secondaryVariant
+                                    )
                                     .clickable {
                                         onItemClick(index)
                                         showDropdown = !showDropdown
-                                    },
+                                    }
+                                    .fillMaxWidth(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                Text(text = item)
+                                Text(
+                                    text = item,
+                                    color = MaterialTheme.colors.onSecondary
+                                )
                             }
                         }
                     }

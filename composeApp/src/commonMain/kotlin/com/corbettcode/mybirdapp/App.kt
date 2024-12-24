@@ -73,7 +73,8 @@ fun App() {
 fun BirdsPage(viewModel: BirdsViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
-    val buttonModifier = Modifier.width(100.dp)
+    val buttonModifier = Modifier
+        .width(100.dp)
     var selectedIndex by rememberSaveable { mutableStateOf(0) }
 
     Column(
@@ -87,7 +88,7 @@ fun BirdsPage(viewModel: BirdsViewModel) {
         ) {
             DropdownList(
                 itemList = uiState.categories,
-                selectedIndex = 0,
+                selectedIndex = viewModel.selectedIndex(),
                 modifier = buttonModifier,
                 onItemClick = {viewModel.selectCategory(it)},
             )
@@ -111,7 +112,9 @@ fun BirdsPage(viewModel: BirdsViewModel) {
                 columns = GridCells.Fixed( 2 ),
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalArrangement = Arrangement.spacedBy(5.dp),
-                modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 5.dp),
                 content = {
                     items(uiState.selectedImages) {
                         BirdImageCell(it)
@@ -125,7 +128,7 @@ fun BirdsPage(viewModel: BirdsViewModel) {
 @Composable
 fun BirdImageCell(image: BirdImage) {
     KamelImage(
-        asyncPainterResource( "https://sebi.io/demo-image-api/${image.path}" ),
+        asyncPainterResource( "https://corbettcode.github.io/demo-data-api/${image.path}" ),
         "${image.category} by ${image.author}",
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxWidth().aspectRatio(1.0f)
