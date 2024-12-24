@@ -16,7 +16,7 @@ data class BirdsUiState(
     val images: List<BirdImage> = emptyList(),
     val selectedCategory: String? = null
 ) {
-    val categories = images.map { it.category }.toSet()
+    val categories = images.map { it.category }
     val selectedImages = images.filter { it.category == selectedCategory }
 }
 
@@ -39,9 +39,9 @@ class BirdsViewModel: ViewModel() {
         httpClient.close()
     }
 
-    fun selectCategory(category: String) {
+    fun selectCategory(index: Int) {
         _uiState.update {
-            it.copy(selectedCategory = category)
+            it.copy(selectedCategory = it.categories[index])
         }
     }
 

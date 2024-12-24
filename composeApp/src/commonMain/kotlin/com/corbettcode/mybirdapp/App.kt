@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -18,11 +19,13 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.corbettcode.compose.component.DropdownList
 import com.corbettcode.mybirdapp.model.BirdImage
 import com.corbettcode.mybirdapp.model.BirdsViewModel
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -69,6 +72,10 @@ fun App() {
 @Composable
 fun BirdsPage(viewModel: BirdsViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val buttonModifier = Modifier.width(100.dp)
+    var selectedIndex by rememberSaveable { mutableStateOf(0) }
+
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,21 +85,27 @@ fun BirdsPage(viewModel: BirdsViewModel) {
             Modifier.fillMaxWidth().padding(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            for(category in uiState.categories) {
-                Button(onClick = {
-                    viewModel.selectCategory(category)
-                },
-                    modifier = Modifier.aspectRatio(1.0f).fillMaxSize().weight(1.0f),
-                    elevation = ButtonDefaults.elevation(
-                        defaultElevation = 0.dp,
-                        focusedElevation = 0.dp
-                    )
-                ) {
-                    Text(category)
-                }
-            }
-
+            DropdownList(
+                itemList = uiState.categories,
+                selectedIndex = 0,
+                modifier = buttonModifier,
+                onItemClick = {viewModel.selectCategory(it)},
+            )
+//            for(category in uiState.categories) {
+//                Button(onClick = {
+//                    viewModel.selectCategory(category)
+//                },
+//                    modifier = Modifier.aspectRatio(1.0f).fillMaxSize().weight(1.0f),
+//                    elevation = ButtonDefaults.elevation(
+//                        defaultElevation = 0.dp,
+//                        focusedElevation = 0.dp
+//                    )
+//                ) {
+//                    Text(category)
+//                }
+//            }
         }
+
         AnimatedVisibility(uiState.selectedImages.isNotEmpty()) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed( 2 ),
